@@ -1,3 +1,5 @@
-/obj
-/bin
+RPSGame.Solution/RPSGame/obj
+RPSGame.Solution/RPSGame/bin
+RPSGame.Solution/RPSGameTests/obj
+RPSGame.Solution/RPSGameTests/bin
 /.vscode
