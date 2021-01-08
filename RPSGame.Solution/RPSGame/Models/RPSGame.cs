@@ -5,79 +5,51 @@ namespace RPS.Models
 {
 	public class Game
 	{
-		string answer;
-		List<string> answersItWinsOver = new List<string>();
+		public string PlayerAnswer;
+		public string CpuAnswer;
+		public List<string> Answers = new List<string>() { "rock", "paper", "scissors" };
 
-		Game(string answer, List<string> answersItWinsOver)
+		public Game(string playerChoice, string cpuChoice = "")
 		{
-			this.answer = answer;
-			this.answersItWinsOver = answersItWinsOver;
+			this.PlayerAnswer = playerChoice.ToLower();
+			this.CpuAnswer = string.IsNullOrEmpty(cpuChoice) ? GetCPUAnswer() : cpuChoice;
 		}
 
-		public static void PlayGame(string startMessage = "")
+		string GetCPUAnswer()
 		{
-			List<Game> gameData = new List<Game>()
-			{
-				new Game("rock", new List<string>() { "scissors" }),
-				new Game("paper", new List<string>() { "rock" }),
-				new Game("scissors", new List<string>() { "paper" }),
-				new Game("shotgun", new List<string>() { "rock", "paper", "scissors" })
-			};
-
-			// Start game
-			if (string.IsNullOrEmpty(startMessage))
-			{
-				Console.WriteLine("Play Rock Paper Scissors with me! Do you choose rock, paper, scissors, or shotgun?");
-			}
-			else
-			{
-				Console.WriteLine(startMessage);
-			}
-
-			string playerAnswer = Console.ReadLine();
-
-			for (int i = 0; i < gameData.Count; i++)
-			{
-				// If valid answer
-				if (playerAnswer == gameData[i].answer)
-				{
-					Random rand = new Random();
-					int randNum = rand.Next(0, gameData.Count - 1);
-					string cpuAnswer = gameData[randNum].answer;
-					Console.WriteLine("CPU played: " + cpuAnswer);
-					DetermineWinner(playerAnswer, cpuAnswer, gameData[randNum].answersItWinsOver);
-					return;
-				}
-			}
-
-			// If invalid answer
-			Console.WriteLine("Please answer with 'rock', 'paper', 'scissors', or 'shotgun'!");
-
-			PlayGame("Care to try again? Rock, paper, or scissors?");
+			Random random = new Random();
+			int randomNumer = random.Next(0, Answers.Count);
+			return Answers[randomNumer];
 		}
 
-		static void DetermineWinner(string playerAnswer, string cpuAnswer, List<string> eval)
+		public string DetermineWinner()
 		{
-			// If tie
-			if (playerAnswer == cpuAnswer)
+			string result;
+			Console.WriteLine("-------------------------");
+
+			if (PlayerAnswer == CpuAnswer)
 			{
-				Console.WriteLine(playerAnswer + " = " + cpuAnswer);
-				Console.WriteLine("A tie! Woah! Everybody wins!");
+				// Tie
+				Console.WriteLine("Woah! It's a tie! Imagine that! o:");
+				result = "tie";
 			}
-			// If CPU won
-			else if (eval.Contains(playerAnswer))
+			else if (PlayerAnswer == "shotgun" || (PlayerAnswer == "rock" && CpuAnswer == "scissors") || (PlayerAnswer == "scissors" && CpuAnswer == "paper") || (PlayerAnswer == "paper" && CpuAnswer == "rock"))
 			{
-				Console.WriteLine(playerAnswer + " < " + cpuAnswer);
-				Console.WriteLine("CPU won! Better luck next time!");
-			}
-			// If player won
-			else
-			{
-				Console.WriteLine(playerAnswer + " > " + cpuAnswer);
+				// Win
+				Console.WriteLine(PlayerAnswer + " > " + CpuAnswer);
 				Console.WriteLine("You won! Congrats!");
+				 result = "win";
+			}
+			else
+			{
+				// Lose
+				Console.WriteLine(PlayerAnswer + " < " + CpuAnswer);
+				Console.WriteLine("CPU won! Better luck next time, I guess...");
+				result = "lose";
 			}
 
-			PlayGame("Care to play again? Rock, paper, scissors, or shotgun?");
+			Console.WriteLine("-------------------------");
+			return result;
 		}
 	}
 }
