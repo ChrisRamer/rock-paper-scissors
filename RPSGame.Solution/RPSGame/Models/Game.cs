@@ -5,17 +5,17 @@ namespace RPS.Models
 {
 	public class Game
 	{
-		public string PlayerAnswer;
-		public string CpuAnswer;
+		public string PlayerAnswer { get; set; }
+		public string CpuAnswer { get; set; }
 		public List<string> Answers = new List<string>() { "rock", "paper", "scissors" };
 
-		public Game(string playerChoice, string cpuChoice = "")
+		public Game(string playerChoice)
 		{
 			this.PlayerAnswer = playerChoice.ToLower();
-			this.CpuAnswer = string.IsNullOrEmpty(cpuChoice) ? GetCPUAnswer() : cpuChoice;
+			this.CpuAnswer =GetCPUAnswer();
 		}
 
-		string GetCPUAnswer()
+		public string GetCPUAnswer()
 		{
 			Random random = new Random();
 			int randomNumer = random.Next(0, Answers.Count);
@@ -25,30 +25,23 @@ namespace RPS.Models
 		public string DetermineWinner()
 		{
 			string result;
-			Console.WriteLine("-------------------------");
 
 			if (PlayerAnswer == CpuAnswer)
 			{
 				// Tie
-				Console.WriteLine("Woah! It's a tie! Imagine that! o:");
 				result = "tie";
 			}
 			else if (PlayerAnswer == "shotgun" || (PlayerAnswer == "rock" && CpuAnswer == "scissors") || (PlayerAnswer == "scissors" && CpuAnswer == "paper") || (PlayerAnswer == "paper" && CpuAnswer == "rock"))
 			{
 				// Win
-				Console.WriteLine(PlayerAnswer + " > " + CpuAnswer);
-				Console.WriteLine("You won! Congrats!");
 				 result = "win";
 			}
 			else
 			{
 				// Lose
-				Console.WriteLine(PlayerAnswer + " < " + CpuAnswer);
-				Console.WriteLine("CPU won! Better luck next time, I guess...");
 				result = "lose";
 			}
 
-			Console.WriteLine("-------------------------");
 			return result;
 		}
 	}
